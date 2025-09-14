@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rodocontador</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      img#spinner {
+        animation: spin 2s linear infinite;
+      }
+      body {
+        background-image: url("./wallpaper.jpg");
+        background-position: center top;
+        background-size: cover;
+        font-family: "Orbitron", sans-serif;
+      }
+      main {
+        background-color: #ffffffab;
+      }
+      #confeti {
+        background-image: url(./confeti.gif);
+        background-size: 40%;
+      }
+      #countdown {
+        font-family: "Orbitron", sans-serif;
+        font-size: 3.5rem;
+        background-color: #000;
+        padding: 15px 30px;
+        border-radius: 8px;
+        text-align: center;
+        letter-spacing: 6px;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+    </style>
+  </head>
+  <body class="overflow-hidden">
+    <main class="content text-center w-screen h-screen">
+      <div
+        id="card"
+        class="bg-gray-800 rounded-md w-full md:w-2/5 p-8 absolute bottom-0 md:bottom-auto md:top-[10vh] md:right-[10vh]"
+      >
+        <h1 class="text-xl text-white mb-4">Dias para que regrese Rodolfo</h1>
+
+        <div
+          class="text-6xl text-orange-400 border-2 border-orange-400 text-shadow-orange-400 text-shadow-lg"
+          id="countdown"
+        ></div>
+      </div>
+      <img
+        src="./spinner.png"
+        alt=""
+        id="spinner"
+        class="absolute bottom-[40vh] md:bottom-[10vh] right-[10vh] md:right-[20vh] w-[20vh] md:w-[30vh]"
+      />
+      <div id="confeti" class="w-screen h-screen absolute top-[1vh] hidden"></div>
+    </main>
+
+    <script>
+      function updateCountdown() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+
+        // Establece la fecha objetivo para el día 17 a las 8 a.m. del mes actual
+        let targetDate = new Date(year, month, 17, 8, 0, 0);
+
+        // Si la fecha objetivo ya pasó en este mes, la establece para el próximo mes
+        if (now > targetDate) {
+          targetDate = new Date(year, month + 1, 17, 8, 0, 0);
+        }
+
+        const difference = targetDate - now;
+
+        if (difference < 0) {
+          document.getElementById("countdown").innerHTML = "¡Llego Rodolfo!";
+          document.getElementById("confeti").classList.remove("hidden")
+          return;
+        }
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor(
+          (difference % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        document.getElementById(
+          "countdown"
+        ).innerHTML = `${days} : ${hours} : ${minutes} : ${seconds}`;
+      }
+
+      // Actualiza el contador cada segundo
+      setInterval(updateCountdown, 1000);
+
+      // Ejecuta la función por primera vez inmediatamente para evitar el retraso inicial
+      updateCountdown();
+    </script>
+  </body>
+</html>
